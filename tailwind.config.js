@@ -30,7 +30,7 @@ export default {
           '50%': { transform: 'translateY(-10px)' },
         },
         glow: {
-          '0%': { boxShadow: '0 0 5px rgba(88, 166, 255, 0.5)' },
+          '0%': { boxShadow: '0 0 5px rgba(0, 255, 204, 0.5)' }, // Match neon-green
           '100%': { boxShadow: '0 0 20px rgba(0, 255, 204, 0.8)' },
         },
         rotate: {
@@ -42,10 +42,24 @@ export default {
         'grid-pattern': 'linear-gradient(to right, rgba(88, 166, 255, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(88, 166, 255, 0.1) 1px, transparent 1px)',
       },
       boxShadow: {
-        'neon-blue': '0 0 5px rgba(88, 166, 255, 0.5), 0 0 20px rgba(88, 166, 255, 0.3)',
+        'neon': '0 0 15px 0 rgba(0, 255, 204, 0.5)',
+        'neon-blue': '0 0 15px 0 rgba(88, 166, 255, 0.5)',
         'neon-green': '0 0 5px rgba(0, 255, 204, 0.5), 0 0 20px rgba(0, 255, 204, 0.3)',
+      },
+      textShadow: {
+        'neon': '0 0 10px rgba(0, 255, 204, 0.7)',
+        'neon-blue': '0 0 10px rgba(88, 166, 255, 0.7)',
       },
     },
   },
-  plugins: [],
+  plugins: [
+    // Add glow-text utility to match LandingPage
+    function ({ addUtilities }) {
+      addUtilities({
+        '.glow-text': {
+          textShadow: '0 0 5px rgba(0, 255, 204, 0.7), 0 0 15px rgba(0, 255, 204, 0.4), 0 0 25px rgba(0, 255, 204, 0.2)',
+        },
+      });
+    },
+  ],
 };
