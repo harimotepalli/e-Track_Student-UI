@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext} from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X, Shield, Bell, LogIn, UserPlus, MonitorCheck } from 'lucide-react';
+import { Menu, X, LogIn,  MonitorCheck, LogOut, User } from 'lucide-react';
+import AuthContext from './context/AuthContext'; // Import your AuthContext
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+ const { isLoggedIn, logout } = useContext(AuthContext); // 
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,25 +43,43 @@ const Header = () => {
           <nav className="hidden md:flex items-center space-x-8">
             <NavLink href="#dashboard">Dashboard</NavLink>
             <NavLink href="#devices">Devices</NavLink>
-            <NavLink href="#analytics">Analytics</NavLink>
+            <NavLink href="#about">About</NavLink>
             <NavLink href="#support">Support</NavLink>
-            <ActionButton
+
+            {/* <ActionButton
               icon={<Bell size={16} />}
               text="Report Issue"
               className="flex items-center px-4 py-2 rounded-full bg-cool-blue/20 hover:bg-cool-blue/30 border border-cool-blue/50 text-white transition duration-300 "
-            />
-            <ActionButton
-              icon={<LogIn size={16} />}
-              text="Login"
-              href="/login"
-              className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 hover:bg-neon-green/30 border border-neon-green/50 text-white transition duration-300"
-            />
-            <ActionButton
+            /> */}
+             
+             {isLoggedIn ? (
+              <motion.button
+                onClick={logout}
+                className="flex items-center px-4 py-2 rounded-full bg-cool-blue/20 hover:bg-cool-blue/30 border border-cool-blue/50 text-white transition duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Logout
+              </motion.button>
+            ) : (
+              <motion.button
+                className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 hover:bg-neon-green/30 border border-neon-green/50 text-white transition duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <User className="w-4 h-4 mr-2" />
+                Login
+              </motion.button>
+            )}
+
+            {/* <ActionButton
               icon={<UserPlus size={16} />}
               text="Register"
               href="/register"
               className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 hover:bg-neon-green/30 border border-neon-green/50 text-white transition duration-300"
-            />
+            /> */}
+
           </nav>
 
           {/* Mobile Menu Button */}
@@ -84,25 +105,25 @@ const Header = () => {
             <nav className="flex flex-col space-y-4">
               <MobileNavLink href="#dashboard" onClick={toggleMenu}>Dashboard</MobileNavLink>
               <MobileNavLink href="#devices" onClick={toggleMenu}>Devices</MobileNavLink>
-              <MobileNavLink href="#analytics" onClick={toggleMenu}>Analytics</MobileNavLink>
+              <MobileNavLink href="#about" onClick={toggleMenu}>About</MobileNavLink>
               <MobileNavLink href="#support" onClick={toggleMenu}>Support</MobileNavLink>
-              <MobileActionButton
+              {/* <MobileActionButton
                 icon={<Bell size={16} />}
                 text="Report Issue"
                 className="flex items-center py-2 text-white hover:text-cool-blue transition duration-300"
-              />
+              /> */}
               <MobileActionButton
                 icon={<LogIn size={16} />}
                 text="Login"
                 href="/login"
                 className="flex items-center py-2 text-white hover:text-neon-green transition duration-300"
               />
-              <MobileActionButton
+              {/* <MobileActionButton
                 icon={<UserPlus size={16} />}
                 text="Register"
                 href="/register"
                 className="flex items-center py-2 text-white hover:text-neon-green transition duration-300"
-              />
+              /> */}
             </nav>
           </div>
         </motion.div>
