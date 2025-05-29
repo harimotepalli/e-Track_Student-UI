@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ChevronRight, ChevronLeft, Send, Laptop, Smartphone, Router, Fan, Monitor, MousePointer } from 'lucide-react';
+import { X, Check } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const ComplaintModal = ({ onClose }) => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     floor: '',
     wing: '',
@@ -12,312 +13,338 @@ const ComplaintModal = ({ onClose }) => {
     description: ''
   });
 
-  // Available options for each step
-  const floors = ['Floor 2', 'Floor 3', 'Floor 4', 'Floor 5'];
+  const floors = ["2nd Floor", "3rd Floor", "4th Floor", "5th Floor"];
   
   const wings = {
-    'Floor 2': ['Wing A', 'Wing B', 'Wing C'],
-    'Floor 3': ['Wing A', 'Wing B', 'Wing C', 'Wing D'],
-    'Floor 4': ['Wing A', 'Wing B'],
-    'Floor 5': ['Wing A', 'Wing C']
+    "2nd Floor": ["A Wing", "B Wing", "C Wing"],
+    "3rd Floor": ["A Wing", "B Wing", "C Wing", "D Wing"],
+    "4th Floor": ["A Wing", "B Wing"],
+    "5th Floor": ["A Wing", "Main Wing"],
   };
   
   const rooms = {
-    'Wing A': ['Room 101', 'Room 102', 'Room 103', 'Room 104'],
-    'Wing B': ['Room 201', 'Room 202', 'Room 203'],
-    'Wing C': ['Room 301', 'Room 302', 'Room 303', 'Room 304', 'Room 305'],
-    'Wing D': ['Room 401', 'Room 402']
+    "A Wing": ["Room 101", "Room 102", "Room 103", "Lab 1", "Lab 2"],
+    "B Wing": ["Room 201", "Room 202", "Room 203", "Conference Room"],
+    "C Wing": ["Room 301", "Room 302", "Lab 3"],
+    "D Wing": ["Room 401", "Room 402", "Server Room"],
+    "Main Wing": ["Main Lab", "Auditorium", "Library"]
   };
   
-  const devices = [
-    { id: 'monitor', name: 'Monitor', icon: <Monitor size={24} /> },
-    { id: 'computer', name: 'Computer', icon: <Laptop size={24} /> },
-    { id: 'mouse', name: 'Mouse', icon: <MousePointer size={24} /> },
-    { id: 'smartphone', name: 'Smartphone', icon: <Smartphone size={24} /> },
-    { id: 'router', name: 'Router', icon: <Router size={24} /> },
-    { id: 'ac', name: 'Air Conditioner', icon: <Fan size={24} /> }
-  ];
+  const devices = {
+    "Monitor": ["Dell P2419H", "HP Z27", "LG UltraFine", "Samsung S32"],
+    "Computer": ["Dell OptiPlex", "HP EliteDesk", "Apple Mac Mini"],
+    "Router": ["Cisco SG300", "TP-Link Archer", "Netgear Nighthawk"],
+    "AC": ["Daikin Inverter", "Mitsubishi MSZ", "Carrier Ductless"],
+    "Projector": ["Epson PowerLite", "BenQ TH685", "Sony VPL"],
+    "CCTV": ["Hikvision Dome", "Dahua Bullet", "Axis PTZ"]
+  };
 
-  const handleChange = (field, value) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    
     // Reset dependent fields when parent field changes
-    if (field === 'floor') {
-      setFormData({ ...formData, floor: value, wing: '', room: '', device: '', description: '' });
-    } else if (field === 'wing') {
-      setFormData({ ...formData, wing: value, room: '', device: '', description: '' });
-    } else if (field === 'room') {
-      setFormData({ ...formData, room: value, device: '', description: '' });
-    } else if (field === 'device') {
-      setFormData({ ...formData, device: value, description: '' });
-    } else {
-      setFormData({ ...formData, [field]: value });
+    if (name === 'floor') {
+      setFormData(prev => ({ ...prev, wing: '', room: '', device: '' }));
+    } else if (name === 'wing') {
+      setFormData(prev => ({ ...prev, room: '', device: '' }));
+    } else if (name === 'room') {
+      setFormData(prev => ({ ...prev, device: '' }));
     }
   };
 
-  const handleNext = () => {
-    if (canProceed()) {
-      setStep(step + 1);
+  const nextStep = () => {
+    if (step === 1 && !formData.floor) {
+      toast.error("Please select a floor");
+      return;
     }
+    if (step === 2 && !formData.wing) {
+      toast.error("Please select a wing");
+      return;
+    }
+    if (step === 3 && !formData.room) {
+      toast.error("Please select a room");
+      return;
+    }
+    if (step === 4 && !formData.device) {
+      toast.error("Please select a device");
+      return;
+    }
+    
+    setStep(step + 1);
   };
 
-  const handleBack = () => {
-    setStep(Math.max(0, step - 1));
+  const prevStep = () => {
+    setStep(step - 1);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
-    onClose();
-  };
-
-  const canProceed = () => {
-    switch (step) {
-      case 0: return !!formData.floor;
-      case 1: return !!formData.wing;
-      case 2: return !!formData.room;
-      case 3: return !!formData.device;
-      case 4: return formData.description.length >= 10;
-      default: return false;
+    
+    if (!formData.description) {
+      toast.error("Please provide a description of the issue");
+      return;
     }
-  };
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.3 } },
-    exit: { opacity: 0, transition: { duration: 0.2 } }
-  };
-
-  const contentVariants = {
-    hidden: { x: 50, opacity: 0 },
-    visible: { x: 0, opacity: 1, transition: { duration: 0.3 } },
-    exit: { x: -50, opacity: 0, transition: { duration: 0.2 } }
+    
+    console.log("Form submitted:", formData);
+    toast.success("Complaint submitted successfully!");
+    onClose();
   };
 
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        exit="exit"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        className="fixed inset-0 z-50 flex items-center justify-center bg-charcoal/80 backdrop-blur-sm p-4"
       >
-        <motion.div 
-          className="glassmorphism w-full max-w-md rounded-lg relative overflow-hidden"
+        <motion.div
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.9, opacity: 0 }}
-          transition={{ duration: 0.3 }}
+          className="glassmorphism relative rounded-2xl w-full max-w-md overflow-hidden"
         >
-          {/* Header */}
-          <div className="p-4 border-b border-cool-blue/20 flex justify-between items-center">
-            <h3 className="font-orbitron text-xl text-white">Report an Issue</h3>
-            <button 
-              onClick={onClose}
-              className="text-deep-gray hover:text-white transition-colors"
-            >
-              <X size={20} />
-            </button>
-          </div>
-
-          {/* Progress indicator */}
-          <div className="w-full h-1 bg-darker-blue">
-            <motion.div 
-              className="h-full bg-neon-green"
-              initial={{ width: `${(step / 4) * 100}%` }}
-              animate={{ width: `${(step / 4) * 100}%` }}
-              transition={{ duration: 0.3 }}
-            />
-          </div>
-
-          {/* Step content */}
-          <form onSubmit={handleSubmit}>
-            <div className="p-6">
-              <AnimatePresence mode="wait">
-                {step === 0 && (
-                  <StepContent key="step0" title="Select Floor" variants={contentVariants}>
-                    <div className="grid grid-cols-2 gap-3">
-                      {floors.map((floor) => (
-                        <SelectionButton
-                          key={floor}
-                          text={floor}
-                          selected={formData.floor === floor}
-                          onClick={() => handleChange('floor', floor)}
-                        />
-                      ))}
-                    </div>
-                  </StepContent>
-                )}
-
-                {step === 1 && (
-                  <StepContent key="step1" title="Select Wing" variants={contentVariants}>
-                    <div className="grid grid-cols-2 gap-3">
-                      {wings[formData.floor].map((wing) => (
-                        <SelectionButton
-                          key={wing}
-                          text={wing}
-                          selected={formData.wing === wing}
-                          onClick={() => handleChange('wing', wing)}
-                        />
-                      ))}
-                    </div>
-                  </StepContent>
-                )}
-
-                {step === 2 && (
-                  <StepContent key="step2" title="Select Room" variants={contentVariants}>
-                    <div className="grid grid-cols-2 gap-3">
-                      {rooms[formData.wing].map((room) => (
-                        <SelectionButton
-                          key={room}
-                          text={room}
-                          selected={formData.room === room}
-                          onClick={() => handleChange('room', room)}
-                        />
-                      ))}
-                    </div>
-                  </StepContent>
-                )}
-
-                {step === 3 && (
-                  <StepContent key="step3" title="Select Device" variants={contentVariants}>
-                    <div className="grid grid-cols-2 gap-3">
-                      {devices.map((device) => (
-                        <SelectionButton
-                          key={device.id}
-                          text={device.name}
-                          icon={device.icon}
-                          selected={formData.device === device.id}
-                          onClick={() => handleChange('device', device.id)}
-                        />
-                      ))}
-                    </div>
-                  </StepContent>
-                )}
-
-                {step === 4 && (
-                  <StepContent key="step4" title="Describe the Issue" variants={contentVariants}>
-                    <div className="space-y-4">
-                      <div className="flex flex-col">
-                        <textarea
-                          value={formData.description}
-                          onChange={(e) => handleChange('description', e.target.value)}
-                          className="bg-darker-blue border border-cool-blue/30 rounded-lg p-3 text-white h-28 focus:outline-none focus:border-neon-green focus:ring-1 focus:ring-neon-green/50 transition-all"
-                          placeholder="Please describe the issue in detail..."
-                        />
-                        <p className="text-xs text-deep-gray mt-2">
-                          Characters: {formData.description.length}/500
-                        </p>
-                      </div>
-
-                      <div className="bg-darker-blue/50 p-4 rounded-lg">
-                        <h4 className="font-orbitron text-sm text-white mb-2">Issue Summary</h4>
-                        <ul className="space-y-1 text-sm">
-                          <li className="text-deep-gray flex justify-between">
-                            <span>Location:</span>
-                            <span className="text-white">{formData.floor}, {formData.wing}, {formData.room}</span>
-                          </li>
-                          <li className="text-deep-gray flex justify-between">
-                            <span>Device:</span>
-                            <span className="text-white">
-                              {devices.find(d => d.id === formData.device)?.name || ''}
-                            </span>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </StepContent>
-                )}
-              </AnimatePresence>
+          <div className="p-6">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="text-2xl font-orbitron font-bold text-neon-green">Device Issue Report</h2>
+              <button 
+                onClick={onClose}
+                className="text-deep-gray hover:text-white"
+              >
+                <X className="w-6 h-6" />
+              </button>
             </div>
 
-            {/* Footer */}
-            <div className="p-4 border-t border-cool-blue/20 flex justify-between">
-              {step > 0 ? (
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className="flex items-center space-x-1 text-deep-gray hover:text-white transition-colors"
+            <div className="mb-6">
+              <div className="flex justify-between relative mb-2">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <div 
+                    key={i}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center z-10 ${
+                      step >= i ? 'bg-neon-green text-charcoal' : 'bg-deep-gray/30 text-deep-gray'
+                    }`}
+                  >
+                    {i < step ? <Check className="w-4 h-4" /> : i}
+                  </div>
+                ))}
+                <div className="absolute top-4 left-0 right-0 h-0.5 bg-deep-gray/30 -z-0"></div>
+                <div 
+                  className="absolute top-4 left-0 h-0.5 bg-neon-green -z-0 transition-all duration-300"
+                  style={{ width: `${(step - 1) * 25}%` }}
+                ></div>
+              </div>
+              <div className="flex justify-between text-xs text-deep-gray">
+                <span>Location</span>
+                <span>Wing</span>
+                <span>Room</span>
+                <span>Device</span>
+                <span>Details</span>
+              </div>
+            </div>
+
+            <form onSubmit={handleSubmit}>
+              {step === 1 && (
+                <motion.div
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  className="mb-6"
                 >
-                  <ChevronLeft size={16} />
-                  <span>Back</span>
-                </button>
-              ) : (
-                <div></div>
+                  <label className="block text-sm font-medium text-deep-gray mb-2">
+                    Select Floor
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {floors.map((floor) => (
+                      <motion.button
+                        key={floor}
+                        type="button"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => setFormData({ ...formData, floor })}
+                        className={`p-4 rounded-lg border ${
+                          formData.floor === floor
+                            ? 'border-neon-green bg-neon-green/10 text-neon-green'
+                            : 'border-deep-gray/30 hover:border-deep-gray/50'
+                        }`}
+                      >
+                        {floor}
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
               )}
 
-              {step < 4 ? (
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  disabled={!canProceed()}
-                  className={`flex items-center space-x-1 px-4 py-2 rounded-md 
-                    ${canProceed() 
-                      ? 'bg-cool-blue text-white hover:bg-neon-green hover:text-darker-blue' 
-                      : 'bg-darker-blue text-deep-gray cursor-not-allowed'} 
-                    transition-colors`}
+              {step === 2 && (
+                <motion.div
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  className="mb-6"
                 >
-                  <span>Next</span>
-                  <ChevronRight size={16} />
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  disabled={!canProceed()}
-                  className={`flex items-center space-x-2 px-4 py-2 rounded-md 
-                    ${canProceed() 
-                      ? 'bg-neon-green text-darker-blue hover:bg-cool-blue hover:text-white' 
-                      : 'bg-darker-blue text-deep-gray cursor-not-allowed'} 
-                    transition-colors`}
-                >
-                  <span>Submit</span>
-                  <Send size={16} />
-                </button>
+                  <label className="block text-sm font-medium text-deep-gray mb-2">
+                    Select Wing
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {wings[formData.floor].map((wing) => (
+                      <motion.button
+                        key={wing}
+                        type="button"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => setFormData({ ...formData, wing })}
+                        className={`p-4 rounded-lg border ${
+                          formData.wing === wing
+                            ? 'border-neon-green bg-neon-green/10 text-neon-green'
+                            : 'border-deep-gray/30 hover:border-deep-gray/50'
+                        }`}
+                      >
+                        {wing}
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
               )}
-            </div>
-          </form>
+
+              {step === 3 && (
+                <motion.div
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  className="mb-6"
+                >
+                  <label className="block text-sm font-medium text-deep-gray mb-2">
+                    Select Room
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {rooms[formData.wing].map((room) => (
+                      <motion.button
+                        key={room}
+                        type="button"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => setFormData({ ...formData, room })}
+                        className={`p-4 rounded-lg border ${
+                          formData.room === room
+                            ? 'border-neon-green bg-neon-green/10 text-neon-green'
+                            : 'border-deep-gray/30 hover:border-deep-gray/50'
+                        }`}
+                      >
+                        {room}
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {step === 4 && (
+                <motion.div
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  className="mb-6"
+                >
+                  <label className="block text-sm font-medium text-deep-gray mb-2">
+                    Select Device Type
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    {Object.keys(devices).map((device) => (
+                      <motion.button
+                        key={device}
+                        type="button"
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
+                        onClick={() => setFormData({ ...formData, device })}
+                        className={`p-4 rounded-lg border ${
+                          formData.device === device
+                            ? 'border-neon-green bg-neon-green/10 text-neon-green'
+                            : 'border-deep-gray/30 hover:border-deep-gray/50'
+                        }`}
+                      >
+                        {device}
+                      </motion.button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {step === 5 && (
+                <motion.div
+                  initial={{ x: 20, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: -20, opacity: 0 }}
+                  className="mb-6"
+                >
+                  <div className="mb-4">
+                    <label className="block text-sm font-medium text-deep-gray mb-2">
+                      Issue Details
+                    </label>
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleChange}
+                      className="w-full p-3 bg-charcoal/50 border border-deep-gray/30 rounded-lg focus:border-neon-green focus:ring focus:ring-neon-green/20 focus:outline-none text-white"
+                      rows="4"
+                      placeholder="Describe the issue you're experiencing..."
+                    ></textarea>
+                  </div>
+
+                  <div className="p-4 rounded-lg bg-charcoal border border-deep-gray/30">
+                    <h3 className="font-orbitron text-sm mb-2">Summary</h3>
+                    <div className="grid grid-cols-2 gap-y-2 text-sm">
+                      <span className="text-deep-gray">Floor:</span>
+                      <span>{formData.floor}</span>
+                      <span className="text-deep-gray">Wing:</span>
+                      <span>{formData.wing}</span>
+                      <span className="text-deep-gray">Room:</span>
+                      <span>{formData.room}</span>
+                      <span className="text-deep-gray">Device:</span>
+                      <span>{formData.device}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+
+              <div className="flex justify-between">
+                {step > 1 && (
+                  <motion.button
+                    type="button"
+                    onClick={prevStep}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-2 rounded-lg border border-deep-gray/30 hover:border-deep-gray/50"
+                  >
+                    Back
+                  </motion.button>
+                )}
+                
+                {step < 5 ? (
+                  <motion.button
+                    type="button"
+                    onClick={nextStep}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-cool-blue to-neon-green text-charcoal font-medium ml-auto"
+                  >
+                    Next
+                  </motion.button>
+                ) : (
+                  <motion.button
+                    type="submit"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="px-4 py-2 rounded-lg bg-gradient-to-r from-cool-blue to-neon-green text-charcoal font-medium ml-auto"
+                  >
+                    Submit
+                  </motion.button>
+                )}
+              </div>
+            </form>
+          </div>
         </motion.div>
       </motion.div>
     </AnimatePresence>
   );
 };
-
-const StepContent = ({ title, children, variants }) => (
-  <motion.div
-    variants={variants}
-    initial="hidden"
-    animate="visible"
-    exit="exit"
-    className="space-y-4"
-  >
-    <h4 className="font-orbitron text-lg text-white">{title}</h4>
-    {children}
-  </motion.div>
-);
-
-const SelectionButton = ({ text, icon, selected, onClick }) => (
-  <motion.button
-    type="button"
-    onClick={onClick}
-    className={`p-3 rounded-lg flex items-center space-x-2 transition-all duration-200
-      ${selected 
-        ? 'bg-cool-blue/20 border border-cool-blue shadow-neon-blue' 
-        : 'bg-darker-blue border border-cool-blue/10 hover:border-cool-blue/30'}`}
-    whileHover={{ scale: 1.02 }}
-    whileTap={{ scale: 0.98 }}
-  >
-    {icon && <span>{icon}</span>}
-    <span className={`font-exo ${selected ? 'text-white' : 'text-deep-gray'}`}>{text}</span>
-    {selected && (
-      <motion.div
-        className="w-2 h-2 ml-auto bg-neon-green rounded-full"
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        transition={{ type: "spring", stiffness: 500, damping: 15 }}
-      />
-    )}
-  </motion.button>
-);
 
 export default ComplaintModal;

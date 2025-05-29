@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import {
   Monitor,
   WifiIcon,
@@ -9,14 +9,34 @@ import {
   AirVent,
 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import ComplaintButton from './ComplaintButton';
+import ComplaintModal from './ComplaintModal';
+import LoginModal from './LoginModal';
+import AuthContext from './context/AuthContext';
 
-// import ComplaintModal from './ComplaintModal';
-
-// Placeholder for ComplaintButton (replace with actual import if available)
-// import ComplaintButton from './ComplaintButton';
 
 const Hero = () => {
-  // Define icon mapping for electronic items
+
+  const [showComplaintModal, setShowComplaintModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const { isLoggedIn } = useContext(AuthContext);
+
+  const handleComplaintClick = () => {
+    if (isLoggedIn) {
+      setShowComplaintModal(true);
+    } else {
+      setShowLoginModal(true);
+    }
+  };
+
+  const closeComplaintModal = () => {
+    setShowComplaintModal(false);
+  };
+
+  const closeLoginModal = () => {
+    setShowLoginModal(false);
+  };
+
   const electronicItems = {
     MONITOR: { icon: Monitor, name: 'Monitor' },
     KEYBOARD: { icon: Keyboard, name: 'Keyboard' },
@@ -38,23 +58,9 @@ const Hero = () => {
     },
   };
 
-  // Placeholder for handleComplaintClick (replace with actual logic if needed)
-  const handleComplaintClick = () => {
-    console.log('Complaint button clicked');
-    // Add logic here or import from context/props
-  };
-
-  // Placeholder for ComplaintButton with styling to match LandingPage
-  const ComplaintButton = ({ onClick }) => (
-    <button
-      onClick={onClick}
-      className="px-8 py-4 bg-neon-green text-charcoal font-orbitron font-bold text-lg rounded-xl shadow-neon-green hover:bg-neon-green/90 hover:shadow-neon-green/80 transition animate-glow"
-    >
-      File a Complaint
-    </button>
-  );
 
   return (
+    <main className="flex-grow overflow-x-hidden relative">
     <section className="min-h-screen w-full relative">
       <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 to-charcoal z-0"></div>
 
@@ -99,15 +105,23 @@ const Hero = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.6 }}
-          >
-            <ComplaintButton onClick={handleComplaintClick} />
-          </motion.div>
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5, delay: 0.6 }}
+            >
+              <ComplaintButton onClick={handleComplaintClick} />
+            </motion.div>
         </div>
       </div>
+      {showComplaintModal && (
+        <ComplaintModal onClose={closeComplaintModal} />
+      )}
+      
+      {showLoginModal && (
+        <LoginModal onClose={closeLoginModal} />
+      )}
     </section>
+    </main>
   );
 };
 
