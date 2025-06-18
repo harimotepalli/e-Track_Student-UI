@@ -7,6 +7,34 @@ import {
   Fan,
   Lightbulb,
   AirVent,
+  Printer,
+  HardDrive,
+  Router,
+  BatteryCharging,
+  Usb,
+  Tv,
+  Speaker,
+  Camera,
+  Cpu,
+  Projector,
+  Server,
+  Laptop,
+  Plug,
+  SatelliteDish,
+  Settings,
+  Smartphone,
+  Tablet,
+  Network,
+  Database,
+  Cloud,
+  Shield,
+  AlarmClock,
+  Power,
+  Bell,
+  Bluetooth,
+  Signal,
+  Volume2,
+  Radar
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import BarcodeSearch from './BarcodeSearch';
@@ -18,53 +46,100 @@ const Hero = () => {
   const [showComplaintModal, setShowComplaintModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
-   const [selectedProduct, setSelectedProduct] = useState(null);
-
+  const [selectedProduct, setSelectedProduct] = useState(null);
 
   const handleComplaintClick = () => {
-    if (isLoggedIn) {
-      setShowComplaintModal(true);
-    } else {
-      setShowLoginModal(true);
-    }
+    isLoggedIn ? setShowComplaintModal(true) : setShowLoginModal(true);
   };
 
-  const closeComplaintModal = () => {
-    setShowComplaintModal(false);
-  };
+  const closeComplaintModal = () => setShowComplaintModal(false);
+  const closeLoginModal = () => setShowLoginModal(false);
 
-  const closeLoginModal = () => {
-    setShowLoginModal(false);
-  };
+  const electronicItems = [
+    Monitor,
+    Keyboard,
+    Mouse,
+    Fan,
+    Lightbulb,
+    WifiIcon,
+    AirVent,
+    Printer,
+    HardDrive,
+    Router,
+    BatteryCharging,
+    Usb,
+    Tv,
+    Speaker,
+    Camera,
+    Cpu,
+    Projector,
+    Server,
+    Laptop,
+    Plug,
+    SatelliteDish,
+    Settings,
+    Smartphone,
+    Tablet,
+    Network,
+    Database,
+    Cloud,
+    Shield,
+    AlarmClock,
+    Power,
+    Bell,
+    Bluetooth,
+    Signal,
+    Volume2,
+    Radar
+  ];
 
-  const electronicItems = {
-    MONITOR: { icon: Monitor, name: 'Monitor' },
-    KEYBOARD: { icon: Keyboard, name: 'Keyboard' },
-    MOUSE: { icon: Mouse, name: 'Mouse' },
-    FAN: { icon: Fan, name: 'Fan' },
-    LIGHT: { icon: Lightbulb, name: 'Light' },
-    WIFI_ROUTER: { icon: WifiIcon, name: 'Wi-Fi Router' },
-    AC: { icon: AirVent, name: 'Air Conditioner' },
-  };
-
-  // Animation variants for icons
-  const iconVariants = {
-    initial: { scale: 1, rotate: 0, opacity: 0.8 },
-    hover: {
-      scale: 1.2,
-      rotate: 10,
-      opacity: 1,
-      transition: { duration: 0.3, ease: 'easeInOut' },
+  const floatAnimation = {
+    animate: {
+      y: [0, -15, 0, 15, 0],
+      x: [0, 10, 0, -10, 0],
+      opacity: [0, 0.3, 0.6, 0.3, 0],
+      transition: {
+        repeat: Infinity,
+        duration: 10,
+        ease: 'easeInOut',
+        times: [0, 0.2, 0.5, 0.8, 1]
+      },
     },
+  };
+
+  const getRandomPosition = () => {
+    const margin = 10; // Fixed margin for consistent spacing
+    const top = `${margin + Math.random() * (100 - 2 * margin)}%`;
+    const left = `${margin + Math.random() * (100 - 2 * margin)}%`;
+    return { top, left };
   };
 
   return (
     <main className="flex-grow overflow-x-hidden relative mt-4">
-      <section className="min-h-[80vh] w-full relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 to-charcoal z-0"></div>
+      <section className="min-h-[80vh] w-full relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-charcoal/40 to-charcoal z-0" />
 
-        <div className="container mx-auto px-4 sm:px-6 py-24 relative z-10">
-          <div className="flex flex-col items-center justify-center min-h-0 flex-1 text-center">
+        {/* Animated Background Icons */}
+        <div className="absolute inset-0 z-10 pointer-events-none">
+          {electronicItems.map((Icon, index) => {
+            const { top, left } = getRandomPosition();
+            return (
+              <motion.div
+                key={index}
+                variants={floatAnimation}
+                animate="animate"
+                initial={{ opacity: 0 }}
+                style={{ top, left }}
+                className="absolute p-4 m-4 rounded-full bg-charcoal/40 border border-neon-green/20 shadow-md flex items-center justify-center backdrop-blur-sm" // Consistent margin
+              >
+                <Icon className="w-7 h-7 text-neon-green/50 drop-shadow-md" />
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 py-24 relative z-20">
+          <div className="flex flex-col items-center justify-center text-center">
             <motion.h1
               initial={{ opacity: 0, y: -20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -78,42 +153,23 @@ const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-lg sm:text-xl md:text-2xl font-exo mb-2 sm:mb-4 max-w-3xl text-white"
+              className="text-lg sm:text-xl md:text-2xl font-exo mb-4 max-w-3xl text-white"
             >
               Advanced IoT monitoring system for electronic devices across campus
             </motion.p>
-
-            {/* Icons Section */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-2 sm:mb-4"
-            >
-              {Object.entries(electronicItems).map(([key, { icon: Icon, name }]) => (
-                <motion.div
-                  key={key}
-                  variants={iconVariants}
-                  initial="initial"
-                  whileHover="hover"
-                  className="flex flex-col items-center p-2 sm:p-4 rounded-lg bg-charcoal/50 hover:bg-charcoal/80 transition-colors shadow-neon-green/50"
-                >
-                  <Icon className="w-10 h-10 text-neon-green" />
-                  <span className="text-xs sm:text-sm font-exo text-white mt-2">{name}</span>
-                </motion.div>
-              ))}
-            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: 0.6 }}
+              className="mt-10"
             >
-                <BarcodeSearch setSelectedProduct={setSelectedProduct} />
-      {selectedProduct && <ProductCard product={selectedProduct} />}
+              <BarcodeSearch setSelectedProduct={setSelectedProduct} />
+              {selectedProduct && <ProductCard product={selectedProduct} />}
             </motion.div>
           </div>
         </div>
+
         {showComplaintModal && <ComplaintModal onClose={closeComplaintModal} />}
         {showLoginModal && <LoginModal onClose={closeLoginModal} />}
       </section>
