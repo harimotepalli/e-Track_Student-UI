@@ -1,6 +1,6 @@
 export const productData = [
   {
-    barcode: "PROP-X7B2N4",
+    barcode: "24M11MC040",
     property: {
       id: "2-1-1-monitor-0",
       type: "monitor",
@@ -8,50 +8,50 @@ export const productData = [
       model: "P2419H",
       status: "working",
       purchaseDate: "2023-06-12",
-      barcode: "PROP-X7B2N4",
-      notes: undefined
+      barcode: "24M11MC040",
+      notes: undefined,
     },
     location: {
       floor: { id: 2, name: "Floor 2" },
       hall: { id: 1, name: "Left Wing" },
-      room: { id: 1, name: "Hall 1" }
-    }
+      room: { id: 1, name: "Hall 1" },
+    },
   },
   {
-    barcode: "PROP-K9M5P8",
+    barcode: "24M11MC110",
     property: {
       id: "2-2-1-light-0",
-      type: "light",
-      brand: "Philips",
+      type: "Krishna kojja",
+      brand: "tejaa",
       model: "Smart Bulb",
       status: "working",
       purchaseDate: "2022-11-03",
-      barcode: "PROP-K9M5P8",
-      notes: "Maintenance performed on 6/5/2025"
+      barcode: "24M11MC110",
+      notes: "Maintenance performed on 6/5/2025",
     },
     location: {
       floor: { id: 2, name: "Floor 2" },
       hall: { id: 2, name: "Corridor" },
-      room: { id: 1, name: "Front Side" }
-    }
+      room: { id: 1, name: "Front Side" },
+    },
   },
   {
-    barcode: "PROP-Z3T8R1",
+    barcode: "24M11MC128",
     property: {
       id: "3-1-2-keyboard-1",
-      type: "keyboard",
-      brand: "Logitech",
-      model: "K120",
+      type: "Shyam",
+      brand: "Apan",
+      model: "kirikiri",
       status: "working",
       purchaseDate: "2024-02-19",
-      barcode: "PROP-Z3T8R1",
-      notes: undefined
+      barcode: "24M11MC263",
+      notes: undefined,
     },
     location: {
       floor: { id: 3, name: "Floor 3" },
       hall: { id: 1, name: "Left Wing" },
-      room: { id: 2, name: "Bay 2" }
-    }
+      room: { id: 2, name: "Bay 2" },
+    },
   },
   {
     barcode: "PROP-Q6V4J7",
@@ -63,13 +63,13 @@ export const productData = [
       status: "not_working",
       purchaseDate: "2021-08-25",
       barcode: "PROP-Q6V4J7",
-      notes: undefined
+      notes: undefined,
     },
     location: {
       floor: { id: 3, name: "Floor 3" },
       hall: { id: 3, name: "Right Wing" },
-      room: { id: 3, name: "CEO Cabin" }
-    }
+      room: { id: 3, name: "CEO Cabin" },
+    },
   },
   {
     barcode: "PROP-W2F9L3",
@@ -81,13 +81,13 @@ export const productData = [
       status: "working",
       purchaseDate: "2023-03-10",
       barcode: "PROP-W2F9L3",
-      notes: "Maintenance performed on 6/5/2025"
+      notes: "Maintenance performed on 6/5/2025",
     },
     location: {
       floor: { id: 3, name: "Floor 3" },
       hall: { id: 2, name: "Corridor" },
-      room: { id: 2, name: "Back Side" }
-    }
+      room: { id: 2, name: "Back Side" },
+    },
   },
   {
     barcode: "PROP-P8H6T2",
@@ -99,13 +99,13 @@ export const productData = [
       status: "working",
       purchaseDate: "2022-07-22",
       barcode: "PROP-P8H6T2",
-      notes: undefined
+      notes: undefined,
     },
     location: {
       floor: { id: 4, name: "Floor 4" },
       hall: { id: 1, name: "Left Wing" },
-      room: { id: 1, name: "Hall 2" }
-    }
+      room: { id: 1, name: "Hall 2" },
+    },
   },
   {
     barcode: "PROP-M4R7K9",
@@ -117,13 +117,13 @@ export const productData = [
       status: "working",
       purchaseDate: "2024-01-15",
       barcode: "PROP-M4R7K9",
-      notes: undefined
+      notes: undefined,
     },
     location: {
       floor: { id: 4, name: "Floor 4" },
       hall: { id: 3, name: "Right Wing" },
-      room: { id: 1, name: "Hall 1" }
-    }
+      room: { id: 1, name: "Hall 1" },
+    },
   },
   {
     barcode: "PROP-Y9N3B5",
@@ -135,13 +135,13 @@ export const productData = [
       status: "working",
       purchaseDate: "2023-09-05",
       barcode: "PROP-Y9N3B5",
-      notes: undefined
+      notes: undefined,
     },
     location: {
       floor: { id: 5, name: "Floor 5" },
       hall: { id: 1, name: "Left Wing" },
-      room: { id: 1, name: "Bay 1" }
-    }
+      room: { id: 1, name: "Bay 1" },
+    },
   },
   {
     barcode: "PROP-C1G8D4",
@@ -153,13 +153,13 @@ export const productData = [
       status: "working",
       purchaseDate: "2022-12-01",
       barcode: "PROP-C1G8D4",
-      notes: "Maintenance performed on 6/5/2025"
+      notes: "Maintenance performed on 6/5/2025",
     },
     location: {
       floor: { id: 5, name: "Floor 5" },
       hall: { id: 3, name: "Right Wing" },
-      room: { id: 2, name: "Server Room" }
-    }
+      room: { id: 2, name: "Server Room" },
+    },
   },
   {
     barcode: "PROP-L5T2M6",
@@ -171,12 +171,12 @@ export const productData = [
       status: "not_working",
       purchaseDate: "2021-05-30",
       barcode: "PROP-L5T2M6",
-      notes: undefined
+      notes: undefined,
     },
     location: {
       floor: { id: 5, name: "Floor 5" },
       hall: { id: 2, name: "Corridor" },
-      room: { id: 1, name: "Front Side" }
-    }
-  }
+      room: { id: 1, name: "Front Side" },
+    },
+  },
 ];
