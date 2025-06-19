@@ -20,21 +20,8 @@ import {
   Server,
   Laptop,
   Plug,
-  SatelliteDish,
-  Settings,
   Smartphone,
   Tablet,
-  Network,
-  Database,
-  Cloud,
-  Shield,
-  AlarmClock,
-  Power,
-  Bell,
-  Bluetooth,
-  Signal,
-  Volume2,
-  Radar
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import BarcodeSearch from './BarcodeSearch';
@@ -55,44 +42,47 @@ const Hero = () => {
   const closeComplaintModal = () => setShowComplaintModal(false);
   const closeLoginModal = () => setShowLoginModal(false);
 
-  const electronicItems = [
+  // Split electronic items into two groups for larger screens
+  const electronicItemsGroup1 = [
     Monitor,
     Keyboard,
     Mouse,
     Fan,
     Lightbulb,
     WifiIcon,
+    Tv,
+    Speaker,
+    Camera,
+    Cpu,
+    Projector,
+  ];
+  const electronicItemsGroup2 = [
     AirVent,
     Printer,
     HardDrive,
     Router,
     BatteryCharging,
     Usb,
-    Tv,
-    Speaker,
-    Camera,
-    Cpu,
-    Projector,
     Server,
     Laptop,
     Plug,
-    SatelliteDish,
-    Settings,
     Smartphone,
     Tablet,
-    Network,
-    Database,
-    Cloud,
-    Shield,
-    AlarmClock,
-    Power,
-    Bell,
-    Bluetooth,
-    Signal,
-    Volume2,
-    Radar
   ];
 
+  // Subset of icons for responsive views (8 icons, 4 per side)
+  const responsiveIcons = [
+    Monitor,
+    Keyboard,
+    Fan,
+    Lightbulb,
+    AirVent,
+    Router,
+    Usb,
+    Smartphone,
+  ];
+
+  // Define animation for icons
   const floatAnimation = {
     animate: {
       y: [0, -15, 0, 15, 0],
@@ -102,17 +92,67 @@ const Hero = () => {
         repeat: Infinity,
         duration: 10,
         ease: 'easeInOut',
-        times: [0, 0.2, 0.5, 0.8, 1]
+        times: [0, 0.2, 0.5, 0.8, 1],
       },
     },
+    initial: { opacity: 0 },
   };
 
-  const getRandomPosition = () => {
-    const margin = 10; // Fixed margin for consistent spacing
-    const top = `${margin + Math.random() * (100 - 2 * margin)}%`;
-    const left = `${margin + Math.random() * (100 - 2 * margin)}%`;
-    return { top, left };
+  // Define animation for responsive icons (from top)
+  const responsiveFloatAnimation = {
+    animate: {
+      y: [-50, -15, 0, 15, 0],
+      x: [0, 5, 0, -5, 0],
+      opacity: [0, 0.5, 0.8, 0.5, 0],
+      transition: {
+        repeat: Infinity,
+        duration: 8,
+        ease: 'easeInOut',
+        times: [0, 0.2, 0.5, 0.8, 1],
+      },
+    },
+    initial: { y: -50, opacity: 0 },
   };
+
+  // Define fixed positions for larger screens with 5% margins
+  const iconPositionsGroup1 = [
+    { top: '5%', left: '3%' },
+    { top: '60%', left: '25%' },
+    { top: '55%', left: '5%' },
+    { top: '20%', left: '15%' },
+    { top: '75%', left: '2%' },
+    { top: '30%', left: '3%' },
+    { top: '35%', left: '25%' },
+    { top: '60%', left: '45%' },
+    { top: '45%', left: '15%' },
+    { top: '70%', left: '35%' },
+    { top: '95%', left: '5%' },
+  ];
+  const iconPositionsGroup2 = [
+    { top: '90%', left: '85%' },
+    { top: '10%', left: '85%' },
+    { top: '15%', left: '75%' },
+    { top: '30%', left: '55%' },
+    { top: '45%', left: '85%' },
+    { top: '69%', left: '55%' },
+    { top: '45%', left: '75%' },
+    { top: '72%', left: '15%' },
+    { top: '55%', left: '85%' },
+    { top: '65%', left: '65%' },
+    { top: '85%', left: '75%' },
+  ];
+
+  // Define positions for responsive icons (4 left, 4 right, 5% margins)
+  const responsiveIconPositions = [
+    { top: '10%', left: '5%' }, // Left
+    { top: '20%', left: '15%' }, // Left
+    { top: '30%', left: '5%' }, // Left
+    { top: '40%', left: '15%' }, // Left
+    { top: '10%', left: '75%' }, // Right
+    { top: '20%', left: '85%' }, // Right
+    { top: '30%', left: '75%' }, // Right
+    { top: '40%', left: '85%' }, // Right
+  ];
 
   return (
     <main className="flex-grow overflow-x-hidden relative mt-4">
@@ -121,18 +161,50 @@ const Hero = () => {
 
         {/* Animated Background Icons */}
         <div className="absolute inset-0 z-10 pointer-events-none">
-          {electronicItems.map((Icon, index) => {
-            const { top, left } = getRandomPosition();
+          {/* Icons for larger screens */}
+          {electronicItemsGroup1.map((Icon, index) => {
+            const position = iconPositionsGroup1[index % iconPositionsGroup1.length];
             return (
               <motion.div
-                key={index}
+                key={`group1-${index}`}
                 variants={floatAnimation}
                 animate="animate"
-                initial={{ opacity: 0 }}
-                style={{ top, left }}
-                className="absolute p-4 m-4 rounded-full bg-charcoal/40 border border-neon-green/20 shadow-md flex items-center justify-center backdrop-blur-sm" // Consistent margin
+                initial={floatAnimation.initial}
+                style={{ top: position.top, left: position.left }}
+                className="absolute p-14 m-4 rounded-full bg-charcoal/40 border-neon-green/20 shadow-md flex items-center justify-center backdrop-blur-sm hidden md:block"
               >
                 <Icon className="w-7 h-7 text-neon-green/50 drop-shadow-md" />
+              </motion.div>
+            );
+          })}
+          {electronicItemsGroup2.map((Icon, index) => {
+            const position = iconPositionsGroup2[index % iconPositionsGroup2.length];
+            return (
+              <motion.div
+                key={`group2-${index}`}
+                variants={floatAnimation}
+                animate="animate"
+                initial={floatAnimation.initial}
+                style={{ top: position.top, left: position.left }}
+                className="absolute p-14 m-4 rounded-full bg-charcoal/40 border-neon-green/20 shadow-md flex items-center justify-center backdrop-blur-sm hidden md:block"
+              >
+                <Icon className="w-7 h-7 text-neon-green/50 drop-shadow-md" />
+              </motion.div>
+            );
+          })}
+          {/* Icons for responsive views */}
+          {responsiveIcons.map((Icon, index) => {
+            const position = responsiveIconPositions[index % responsiveIconPositions.length];
+            return (
+              <motion.div
+                key={`responsive-${index}`}
+                variants={responsiveFloatAnimation}
+                animate="animate"
+                initial={responsiveFloatAnimation.initial}
+                style={{ top: position.top, left: position.left }}
+                className="absolute p-10 m-2 rounded-full bg-charcoal/40 border-neon-green/20 shadow-md flex items-center justify-center backdrop-blur-sm block md:hidden"
+              >
+                <Icon className="w-6 h-6 text-neon-green/50 drop-shadow-md" />
               </motion.div>
             );
           })}

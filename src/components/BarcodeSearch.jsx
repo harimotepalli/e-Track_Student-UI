@@ -1,3 +1,5 @@
+
+ 
 import { Button } from './ui/button';
 import { cn } from '../utils/cn';
 import React, { useState, useEffect, useRef } from 'react';
@@ -245,6 +247,7 @@ const BarcodeSearch = () => {
   const [barcode, setBarcode] = useState('');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [notFound, setNotFound] = useState(false);
+
   const [suggestions, setSuggestions] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const inputRef = useRef(null);
@@ -277,6 +280,9 @@ const BarcodeSearch = () => {
   // Handle search (for button click)
   const handleSearch = () => {
     const found = productData.find((p) => p.barcode === barcode.trim());
+
+    onSearch(found); // Pass found product or undefined to parent
+
     if (found) {
       setSelectedProduct(found);
       setNotFound(false);
@@ -284,12 +290,13 @@ const BarcodeSearch = () => {
       setSelectedProduct(null);
       setNotFound(true);
     }
+
     setIsDropdownOpen(false);
   };
 
   // Handle Enter key press
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === "Enter") {
       handleSearch();
     }
   };
@@ -301,23 +308,18 @@ const BarcodeSearch = () => {
         setIsDropdownOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  // Handle close
-  const handleClose = () => {
-    setSelectedProduct(null);
-    setBarcode('');
-    setSuggestions([]);
-    setIsDropdownOpen(false);
-  };
-
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 relative z-10">
-      <motion.div className="relative w-full max-w-[90vw] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-[50vw] xl:max-w-[40vw] mx-auto" ref={inputRef}>
+      <motion.div
+        className="relative w-full max-w-[90vw] sm:max-w-[80vw] md:max-w-[60vw] lg:max-w-[50vw] xl:max-w-[40vw] mx-auto"
+        ref={inputRef}
+      >
         <div className="relative">
           <input
             type="text"
@@ -382,6 +384,7 @@ const BarcodeSearch = () => {
 
       {/* Fullscreen BarcodeSearchModal */}
       {selectedProduct && <BarcodeSearchModal product={selectedProduct} onClose={handleClose} />}
+
     </div>
   );
 };
