@@ -7,6 +7,7 @@ import DeviceShowcase from './components/DeviceShowcase';
 import Footer from './components/Footer';
 import About from './components/About';
 import AuthContext from './components/context/AuthContext';
+import StatsSection from './components/StatsSection';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,6 +32,7 @@ function App() {
         <Features/>
        
         <DeviceShowcase />
+        <StatsSection />
         <Footer />
 
         <ToastContainer
@@ -47,6 +49,7 @@ function App() {
         />
 
       </div>
+
     </AuthContext.Provider>
   );
 }
