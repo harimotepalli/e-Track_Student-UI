@@ -21,7 +21,8 @@ import { cn } from "../utils/cn";
 import { toast } from "react-toastify";
 
 // ProductCardModal Component (extracted from BarcodeSearch)
-const ProductCardModal = ({ product, onClose }) => {
+const ProductCardModal = ({ product, onClose, triggerLoginModal }) => {
+  const { isLoggedIn } = useContext(AuthContext);
   const [isReporting, setIsReporting] = useState(false);
   const [reportText, setReportText] = useState("");
   const [isSubmitted, setIsSubmitting] = useState(false);
@@ -184,7 +185,15 @@ const ProductCardModal = ({ product, onClose }) => {
                 <div className="flex justify-end mt-6">
                   <motion.button
                     type="button"
-                    onClick={() => setIsReporting(true)}
+                    onClick={() => {
+                      if (!isLoggedIn) {
+                        toast.info("Please log in to report an issue.");
+                        onClose(); // Close modal before opening login
+                        triggerLoginModal(); // Open login modal
+                      } else {
+                        setIsReporting(true); // Continue to report flow
+                      }
+                    }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-4 py-2 rounded-lg bg-gradient-to-r from-cool-blue to-neon-green text-charcoal font-medium"
@@ -460,6 +469,7 @@ const Hero = () => {
               <ProductCardModal
                 product={selectedProduct}
                 onClose={handleCloseModal}
+                triggerLoginModal={() => setShowLoginModal(true)}
               />
             )}
           </div>
