@@ -13,7 +13,6 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import BarcodeScannerComponent from "./BarcodeScannerComponent";
 import BarcodeSearch from "./BarcodeSearch";
-import ComplaintModal from "./ComplaintModal";
 import LoginModal from "./LoginModal";
 import AuthContext from "./context/AuthContext";
 import { productData } from "../data/sampledata";
