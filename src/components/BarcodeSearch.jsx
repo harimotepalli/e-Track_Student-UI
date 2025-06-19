@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
  
 import { Button } from './ui/button';
@@ -248,6 +249,16 @@ const BarcodeSearch = () => {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [notFound, setNotFound] = useState(false);
 
+=======
+import { Button } from "./ui/button";
+import { cn } from "../utils/cn";
+import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
+import { productData } from "../data/sampledata";
+
+const BarcodeSearch = ({ onSearch }) => {
+  const [barcode, setBarcode] = useState("");
+>>>>>>> 8b1f16b50cb5b0c35ad46ae1dd6d6d5423cbcb0e
   const [suggestions, setSuggestions] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const inputRef = useRef(null);
@@ -280,6 +291,7 @@ const BarcodeSearch = () => {
   // Handle search (for button click)
   const handleSearch = () => {
     const found = productData.find((p) => p.barcode === barcode.trim());
+<<<<<<< HEAD
 
     onSearch(found); // Pass found product or undefined to parent
 
@@ -291,6 +303,9 @@ const BarcodeSearch = () => {
       setNotFound(true);
     }
 
+=======
+    onSearch(found); // Pass found product or undefined to parent
+>>>>>>> 8b1f16b50cb5b0c35ad46ae1dd6d6d5423cbcb0e
     setIsDropdownOpen(false);
   };
 
@@ -371,6 +386,7 @@ const BarcodeSearch = () => {
           </motion.ul>
         )}
       </motion.div>
+<<<<<<< HEAD
 
       {notFound && (
         <motion.p
@@ -385,6 +401,8 @@ const BarcodeSearch = () => {
       {/* Fullscreen BarcodeSearchModal */}
       {selectedProduct && <BarcodeSearchModal product={selectedProduct} onClose={handleClose} />}
 
+=======
+>>>>>>> 8b1f16b50cb5b0c35ad46ae1dd6d6d5423cbcb0e
     </div>
   );
 };
