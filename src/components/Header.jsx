@@ -1,20 +1,21 @@
-import React, { useState, useEffect,useContext} from 'react';
-import { motion } from 'framer-motion';
-import { Menu, X, LogIn,  MonitorCheck, LogOut, User } from 'lucide-react';
-import AuthContext from './context/AuthContext'; // Import your AuthContext
+import React, { useState, useEffect, useContext } from "react";
+import { motion } from "framer-motion";
+import { Menu, X, LogIn, MonitorCheck, LogOut, User } from "lucide-react";
+import AuthContext from "./context/AuthContext"; // Import your AuthContext
+import LoginModal from "./LoginModal";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
- const { isLoggedIn, logout } = useContext(AuthContext); // 
-
+  const { isLoggedIn, logout } = useContext(AuthContext); //
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -22,7 +23,9 @@ const Header = () => {
   return (
     <motion.header
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        isScrolled ? 'bg-charcoal/80 backdrop-blur-md py-3 shadow-neon' : 'bg-transparent py-5'
+        isScrolled
+          ? "bg-charcoal/80 backdrop-blur-md py-3 shadow-neon"
+          : "bg-transparent py-5"
       }`}
     >
       <div className="container mx-auto px-4">
@@ -51,8 +54,8 @@ const Header = () => {
               text="Report Issue"
               className="flex items-center px-4 py-2 rounded-full bg-cool-blue/20 hover:bg-cool-blue/30 border border-cool-blue/50 text-white transition duration-300 "
             /> */}
-             
-             {isLoggedIn ? (
+
+            {isLoggedIn ? (
               <motion.button
                 onClick={logout}
                 className="flex items-center px-4 py-2 rounded-full bg-cool-blue/20 hover:bg-cool-blue/30 border border-cool-blue/50 text-white transition duration-300"
@@ -64,6 +67,10 @@ const Header = () => {
               </motion.button>
             ) : (
               <motion.button
+                onClick={() => {
+                  toggleMenu(); // close menu
+                  setShowLoginModal(true); // open modal
+                }}
                 className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 hover:bg-neon-green/30 border border-neon-green/50 text-white transition duration-300"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -79,7 +86,6 @@ const Header = () => {
               href="/register"
               className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 hover:bg-neon-green/30 border border-neon-green/50 text-white transition duration-300"
             /> */}
-
           </nav>
 
           {/* Mobile Menu Button */}
@@ -88,7 +94,11 @@ const Header = () => {
             onClick={toggleMenu}
             whileTap={{ scale: 0.9 }}
           >
-            {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </motion.button>
         </div>
       </div>
@@ -97,16 +107,24 @@ const Header = () => {
       {isMenuOpen && (
         <motion.div
           initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: 'auto' }}
+          animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           className="md:hidden bg-charcoal/95 backdrop-blur-md"
         >
           <div className="container mx-auto px-4 py-4">
             <nav className="flex flex-col space-y-4">
-              <MobileNavLink href="#dashboard" onClick={toggleMenu}>Dashboard</MobileNavLink>
-              <MobileNavLink href="#devices" onClick={toggleMenu}>Devices</MobileNavLink>
-              <MobileNavLink href="#about" onClick={toggleMenu}>About</MobileNavLink>
-              <MobileNavLink href="#support" onClick={toggleMenu}>Support</MobileNavLink>
+              <MobileNavLink href="#dashboard" onClick={toggleMenu}>
+                Dashboard
+              </MobileNavLink>
+              <MobileNavLink href="#devices" onClick={toggleMenu}>
+                Devices
+              </MobileNavLink>
+              <MobileNavLink href="#about" onClick={toggleMenu}>
+                About
+              </MobileNavLink>
+              <MobileNavLink href="#support" onClick={toggleMenu}>
+                Support
+              </MobileNavLink>
               {/* <MobileActionButton
                 icon={<Bell size={16} />}
                 text="Report Issue"
@@ -128,6 +146,40 @@ const Header = () => {
           </div>
         </motion.div>
       )}
+
+      {/* Login Modal */}
+      {showLoginModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h2 className="text-lg font-bold mb-4">Login</h2>
+            {/* Example login form */}
+            <form>
+              <input
+                type="text"
+                placeholder="Username"
+                className="block mb-2 border p-2 w-full"
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                className="block mb-4 border p-2 w-full"
+              />
+              <button
+                type="submit"
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
+                Submit
+              </button>
+            </form>
+            <button
+              className="mt-4 px-4 py-2 bg-gray-300 rounded"
+              onClick={() => setShowLoginModal(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </motion.header>
   );
 };
@@ -145,7 +197,7 @@ const NavLink = ({ href, children }) => (
 );
 
 // Desktop buttons
-const ActionButton = ({ icon, text, href = '#', className }) => (
+const ActionButton = ({ icon, text, href = "#", className }) => (
   <motion.a
     href={href}
     className={className}
@@ -171,7 +223,7 @@ const MobileNavLink = ({ href, onClick, children }) => (
 );
 
 // Mobile buttons
-const MobileActionButton = ({ icon, text, href = '#', className }) => (
+const MobileActionButton = ({ icon, text, href = "#", className }) => (
   <motion.a
     href={href}
     className={className}
