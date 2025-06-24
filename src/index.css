@@ -8,9 +8,16 @@
 
 body {
   @apply bg-charcoal text-white font-exo overflow-x-hidden m-0 p-0;
-  background-image: 
-    radial-gradient(circle at 15% 50%, rgba(88, 166, 255, 0.08) 0%, transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(0, 255, 204, 0.08) 0%, transparent 25%);
+  background-image: radial-gradient(
+      circle at 15% 50%,
+      rgba(88, 166, 255, 0.08) 0%,
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 85% 30%,
+      rgba(0, 255, 204, 0.08) 0%,
+      transparent 25%
+    );
 }
 
 /* .glassmorphism {
@@ -48,13 +55,21 @@ body {
 
 .holographic-button {
   @apply relative overflow-hidden transition-all duration-300 ease-in-out;
-  background: linear-gradient(135deg, rgba(13, 17, 23, 0.9), rgba(22, 27, 34, 0.9));
+  background: linear-gradient(
+    135deg,
+    rgba(13, 17, 23, 0.9),
+    rgba(22, 27, 34, 0.9)
+  );
 }
 
 .holographic-button::before {
   content: "";
   @apply absolute inset-0 opacity-0 transition-opacity duration-300 ease-in-out;
-  background: linear-gradient(135deg, rgba(88, 166, 255, 0.2), rgba(0, 255, 204, 0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(88, 166, 255, 0.2),
+    rgba(0, 255, 204, 0.2)
+  );
 }
 
 .holographic-button:hover::before {
@@ -86,7 +101,7 @@ body {
 /* Globe text path animation */
 .text-on-path {
   fill: none;
-  stroke: theme('colors.neon-green');
+  stroke: theme("colors.neon-green");
   stroke-width: 1px;
   animation: dashOffset 20s linear infinite;
   stroke-dasharray: 100;
