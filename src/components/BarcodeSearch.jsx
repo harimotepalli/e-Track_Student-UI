@@ -1,14 +1,23 @@
-// import { Button } from "./ui/button";
-// import { cn } from "../utils/cn";
+// src/components/BarcodeSearch.jsx
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { productData } from "../data/sampledata";
+import { fetchProductData } from "../data/sampledata";
 
 const BarcodeSearch = ({ onSearch }) => {
   const [barcode, setBarcode] = useState("");
   const [suggestions, setSuggestions] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [productData, setProductData] = useState([]);
   const inputRef = useRef(null);
+
+  // Fetch product data on component mount
+  useEffect(() => {
+    async function loadData() {
+      const data = await fetchProductData();
+      setProductData(data);
+    }
+    loadData();
+  }, []);
 
   // Handle input change and filter suggestions
   const handleInputChange = (e) => {
@@ -17,9 +26,11 @@ const BarcodeSearch = ({ onSearch }) => {
 
     if (value.trim()) {
       const filteredSuggestions = productData
-        .filter((p) => p.barcode.toLowerCase().includes(value.toLowerCase().trim()))
+        .filter((p) =>
+          p.barcode.toLowerCase().includes(value.toLowerCase().trim())
+        )
         .map((p) => p.barcode)
-        .slice(0, 5); // Limit to 5 suggestions
+        .slice(0, 5);
       setSuggestions(filteredSuggestions);
       setIsDropdownOpen(true);
     } else {
@@ -28,28 +39,28 @@ const BarcodeSearch = ({ onSearch }) => {
     }
   };
 
-  // Handle suggestion selection
+  // Handle suggestion click
   const handleSuggestionClick = (suggestion) => {
     setBarcode(suggestion);
     setSuggestions([]);
     setIsDropdownOpen(false);
   };
 
-  // Handle search (for button click)
+  // Handle search
   const handleSearch = () => {
     const found = productData.find((p) => p.barcode === barcode.trim());
-    onSearch(found); // Pass found product or undefined to parent
+    onSearch(found);
     setIsDropdownOpen(false);
   };
 
-  // Handle Enter key press
+  // Handle Enter key
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSearch();
     }
   };
 
-  // Handle click outside to close dropdown
+  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (inputRef.current && !inputRef.current.contains(event.target)) {
@@ -99,7 +110,6 @@ const BarcodeSearch = ({ onSearch }) => {
           </motion.button>
         </div>
 
-        {/* Suggestions Dropdown */}
         {isDropdownOpen && suggestions.length > 0 && (
           <motion.ul
             className="absolute top-full left-0 w-full bg-white border border-gray-200 rounded-lg shadow-xl mt-2 z-20 max-h-60 overflow-y-auto"

@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Home from './home';
-import Homedata from './HomeData';
+import Home from "./home";
+import Homedata from "./HomeData";
 
-import AuthContext from './components/context/AuthContext';
-import MyReports from './MyReports';
+import AuthContext from "./components/context/AuthContext";
+import MyReports from "./components/MyReports";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,7 +27,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />}>
-            <Route index element={<Homedata/>} />
+            <Route index element={<Homedata />} />
 
             <Route path="reports" element={<MyReports />} />
           </Route>

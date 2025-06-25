@@ -1,9 +1,17 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { NavLink, useLocation } from 'react-router-dom';
-import { Menu, X, MonitorCheck, LogOut, User, Bell, UserPlus } from 'lucide-react';
-import AuthContext from './context/AuthContext';
-import LoginModal from './LoginModal';
+import React, { useState, useEffect, useContext } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { NavLink, useLocation } from "react-router-dom";
+import {
+  Menu,
+  X,
+  MonitorCheck,
+  LogOut,
+  User,
+  Bell,
+  UserPlus,
+} from "lucide-react";
+import AuthContext from "./context/AuthContext";
+import LoginModal from "./LoginModal";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -12,14 +20,14 @@ const Header = () => {
   const { isLoggedIn, logout } = useContext(AuthContext);
   const location = useLocation();
 
-  const isHomePage = location.pathname === '/';
+  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
     };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
@@ -33,7 +41,9 @@ const Header = () => {
     <>
       <motion.header
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-          isScrolled ? 'bg-charcoal/80 backdrop-blur-md py-3 shadow-neon' : 'bg-transparent py-5'
+          isScrolled
+            ? "bg-charcoal/80 backdrop-blur-md py-3 shadow-neon"
+            : "bg-transparent py-5"
         }`}
       >
         {/* Header Container */}
@@ -56,35 +66,36 @@ const Header = () => {
             <nav className="hidden md:flex items-center space-x-8">
               <NavLink
                 to="/"
-                className={({ isActive }) => (isActive ? 'text-green-400' : 'text-white')}
+                className={({ isActive }) =>
+                  isActive ? "text-green-400" : "text-white"
+                }
               >
                 Home
               </NavLink>
               <NavLink
                 to="/reports"
-                className={({ isActive }) => (isActive ? 'text-green-400' : 'text-white')}
+                className={({ isActive }) =>
+                  isActive ? "text-green-400" : "text-white"
+                }
               >
                 My Reports
               </NavLink>
               <NavLink
-                to={isHomePage ? '#devices' : '/'}
+                to={isHomePage ? "#devices" : "/"}
                 className="text-white"
               >
                 Devices
               </NavLink>
-              <NavLink
-                to={isHomePage ? '#about' : '/'}
-                className="text-white"
-              >
+              <NavLink to={isHomePage ? "#about" : "/"} className="text-white">
                 About
               </NavLink>
               <NavLink
-                to={isHomePage ? '#support' : '/'}
+                to={isHomePage ? "#support" : "/"}
                 className="text-white"
               >
                 Support
               </NavLink>
-              
+
               {isLoggedIn ? (
                 <motion.button
                   onClick={logout}
@@ -106,7 +117,6 @@ const Header = () => {
                     <User className="w-4 h-4 mr-2" />
                     Login
                   </motion.button>
-                 
                 </>
               )}
             </nav>
@@ -117,7 +127,11 @@ const Header = () => {
               onClick={toggleMenu}
               whileTap={{ scale: 0.9 }}
             >
-              {isMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
             </motion.button>
           </div>
         </div>
@@ -126,7 +140,7 @@ const Header = () => {
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
+            animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-charcoal/95 backdrop-blur-md"
           >
@@ -135,40 +149,44 @@ const Header = () => {
               <nav className="flex flex-col space-y-4">
                 <NavLink
                   to="/"
-                  className={({ isActive }) => (isActive ? 'text-green-400 py-2' : 'text-white py-2')}
+                  className={({ isActive }) =>
+                    isActive ? "text-green-400 py-2" : "text-white py-2"
+                  }
                   onClick={toggleMenu}
                 >
                   Home
                 </NavLink>
                 <NavLink
                   to="/reports"
-                  className={({ isActive }) => (isActive ? 'text-green-400 py-2' : 'text-white py-2')}
+                  className={({ isActive }) =>
+                    isActive ? "text-green-400 py-2" : "text-white py-2"
+                  }
                   onClick={toggleMenu}
                 >
                   My Reports
                 </NavLink>
                 <NavLink
-                  to={isHomePage ? '#devices' : '/'}
+                  to={isHomePage ? "#devices" : "/"}
                   className="text-white py-2"
                   onClick={toggleMenu}
                 >
                   Devices
                 </NavLink>
                 <NavLink
-                  to={isHomePage ? '#about' : '/'}
+                  to={isHomePage ? "#about" : "/"}
                   className="text-white py-2"
                   onClick={toggleMenu}
                 >
                   About
                 </NavLink>
                 <NavLink
-                  to={isHomePage ? '#support' : '/'}
+                  to={isHomePage ? "#support" : "/"}
                   className="text-white py-2"
                   onClick={toggleMenu}
                 >
                   Support
                 </NavLink>
-                
+
                 {isLoggedIn ? (
                   <motion.button
                     onClick={() => {
@@ -193,7 +211,6 @@ const Header = () => {
                       <User className="w-4 h-4 mr-2" />
                       Login
                     </motion.button>
-                    
                   </>
                 )}
               </nav>
@@ -202,7 +219,9 @@ const Header = () => {
         )}
       </motion.header>
       <AnimatePresence>
-        {isLoginModalOpen && <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />}
+        {isLoginModalOpen && (
+          <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
+        )}
       </AnimatePresence>
     </>
   );
