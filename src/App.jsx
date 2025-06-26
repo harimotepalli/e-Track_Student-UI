@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { ToastContainer } from "react-toastify";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
 import Home from "./home";
 import Homedata from "./HomeData";
-
 import AuthContext from "./components/context/AuthContext";
 import MyReports from "./components/MyReports";
 
