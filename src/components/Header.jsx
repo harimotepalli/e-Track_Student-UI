@@ -1,15 +1,8 @@
 import React, { useState, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink, useLocation } from "react-router-dom";
-import {
-  Menu,
-  X,
-  MonitorCheck,
-  LogOut,
-  User,
-  Bell,
-  UserPlus,
-} from "lucide-react";
+import { HashLink } from "react-router-hash-link";
+import { Menu, X, MonitorCheck, LogOut, User } from "lucide-react";
 import AuthContext from "./context/AuthContext";
 import LoginModal from "./LoginModal";
 
@@ -19,8 +12,6 @@ const Header = () => {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { isLoggedIn, logout } = useContext(AuthContext);
   const location = useLocation();
-
-  const isHomePage = location.pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -46,9 +37,7 @@ const Header = () => {
             : "bg-transparent py-5"
         }`}
       >
-        {/* Header Container */}
         <div className="container mx-auto px-4">
-          {/* Header Content */}
           <div className="flex justify-between items-center">
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -64,14 +53,33 @@ const Header = () => {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <NavLink
-                to="/"
+              <HashLink
+                smooth
+                to="/#"
                 className={({ isActive }) =>
                   isActive ? "text-green-400" : "text-white"
                 }
               >
                 Home
-              </NavLink>
+              </HashLink>
+              <HashLink
+                smooth
+                to="/#about"
+                className={({ isActive }) =>
+                  isActive ? "text-green-400" : "text-white"
+                }
+              >
+                About
+              </HashLink>
+              <HashLink
+                smooth
+                to="/#devices"
+                className={({ isActive }) =>
+                  isActive ? "text-green-400" : "text-white"
+                }
+              >
+                Devices
+              </HashLink>
               <NavLink
                 to="/reports"
                 className={({ isActive }) =>
@@ -80,21 +88,10 @@ const Header = () => {
               >
                 My Reports
               </NavLink>
-              <NavLink
-                to={isHomePage ? "#devices" : "/"}
-                className="text-white"
-              >
-                Devices
-              </NavLink>
-              <NavLink to={isHomePage ? "#about" : "/"} className="text-white">
-                About
-              </NavLink>
-              <NavLink
-                to={isHomePage ? "#support" : "/"}
-                className="text-white"
-              >
+
+              <HashLink smooth to="/#support" className="text-white">
                 Support
-              </NavLink>
+              </HashLink>
 
               {isLoggedIn ? (
                 <motion.button
@@ -107,17 +104,15 @@ const Header = () => {
                   Logout
                 </motion.button>
               ) : (
-                <>
-                  <motion.button
-                    onClick={openLoginModal}
-                    className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 border border-neon-green/50 text-white transition duration-300"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                  >
-                    <User className="w-4 h-4 mr-2" />
-                    Login
-                  </motion.button>
-                </>
+                <motion.button
+                  onClick={openLoginModal}
+                  className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 border border-neon-green/50 text-white transition duration-300"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <User className="w-4 h-4 mr-2" />
+                  Login
+                </motion.button>
               )}
             </nav>
 
@@ -144,7 +139,6 @@ const Header = () => {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden bg-charcoal/95 backdrop-blur-md"
           >
-            {/* Mobile Nav Container */}
             <div className="container mx-auto px-4 py-4">
               <nav className="flex flex-col space-y-4">
                 <NavLink
@@ -165,27 +159,30 @@ const Header = () => {
                 >
                   My Reports
                 </NavLink>
-                <NavLink
-                  to={isHomePage ? "#devices" : "/"}
+                <HashLink
+                  smooth
+                  to="/#devices"
                   className="text-white py-2"
                   onClick={toggleMenu}
                 >
                   Devices
-                </NavLink>
-                <NavLink
-                  to={isHomePage ? "#about" : "/"}
+                </HashLink>
+                <HashLink
+                  smooth
+                  to="/#about"
                   className="text-white py-2"
                   onClick={toggleMenu}
                 >
                   About
-                </NavLink>
-                <NavLink
-                  to={isHomePage ? "#support" : "/"}
+                </HashLink>
+                <HashLink
+                  smooth
+                  to="/#support"
                   className="text-white py-2"
                   onClick={toggleMenu}
                 >
                   Support
-                </NavLink>
+                </HashLink>
 
                 {isLoggedIn ? (
                   <motion.button
@@ -201,27 +198,27 @@ const Header = () => {
                     Logout
                   </motion.button>
                 ) : (
-                  <>
-                    <motion.button
-                      onClick={openLoginModal}
-                      className="flex items-center py-2 text-white transition duration-300"
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <User className="w-4 h-4 mr-2" />
-                      Login
-                    </motion.button>
-                  </>
+                  <motion.button
+                    onClick={openLoginModal}
+                    className="flex items-center py-2 text-white transition duration-300"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <User className="w-4 h-4 mr-2" />
+                    Login
+                  </motion.button>
                 )}
               </nav>
             </div>
           </motion.div>
         )}
       </motion.header>
+
       <AnimatePresence>
         {isLoginModalOpen && (
           <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
-        )}
+        )
+        }
       </AnimatePresence>
     </>
   );
