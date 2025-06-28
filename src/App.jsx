@@ -7,7 +7,7 @@ import AuthContext from "./components/context/AuthContext";
 import MyReports from "./components/MyReports";
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [user, setUser] = useState(null);
 
   const login = (userData) => {
@@ -26,7 +26,6 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}>
             <Route index element={<Homedata />} />
-
             <Route path="reports" element={<MyReports />} />
           </Route>
         </Routes>

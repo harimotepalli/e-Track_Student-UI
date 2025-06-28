@@ -14,14 +14,13 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import BarcodeScannerComponent from "./BarcodeScannerComponent";
 import BarcodeSearch from "./BarcodeSearch";
-import LoginModal from "./LoginModal";
 import AuthContext from "./context/AuthContext";
 import { createPortal } from "react-dom";
 import { cn } from "../utils/cn";
 import { toast } from "react-toastify";
 
 // ProductCardModal Component
-const ProductCardModal = ({ product, onClose, triggerLoginModal }) => {
+const ProductCardModal = ({ product, onClose }) => {
   const { isLoggedIn } = useContext(AuthContext);
   const [isReporting, setIsReporting] = useState(false);
   const [reportText, setReportText] = useState("");
@@ -214,13 +213,12 @@ const ProductCardModal = ({ product, onClose, triggerLoginModal }) => {
                   <motion.button
                     type="button"
                     onClick={() => {
-                      if (!isLoggedIn) {
-                        toast.error("Please log in to report an issue.");
-                        onClose();
-                        triggerLoginModal();
-                      } else {
+                      // if (!isLoggedIn) {
+                      //   toast.error("Please log in to report an issue.");
+                      //   onClose();
+                      // } else {
                         setIsReporting(true);
-                      }
+                      // }
                     }}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -353,26 +351,17 @@ const ProductCardModal = ({ product, onClose, triggerLoginModal }) => {
 
 const Hero = () => {
   const [showComplaintModal, setShowComplaintModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
   const [showScanner, setShowScanner] = useState(false);
   const { isLoggedIn } = useContext(AuthContext);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [notFound, setNotFound] = useState(false);
 
   const handleComplaintClick = () => {
-    if (isLoggedIn) {
-      setShowComplaintModal(true);
-    } else {
-      setShowLoginModal(true);
-    }
+    setShowComplaintModal(true);
   };
 
   const closeComplaintModal = () => {
     setShowComplaintModal(false);
-  };
-
-  const closeLoginModal = () => {
-    setShowLoginModal(false);
   };
 
   const electronicItems = {
@@ -453,7 +442,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9 }}
-              className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-2 sm:mb-4"
+              className="hidden md:flex flex-wrap justify-center gap-4 sm:gap-6 mb-2 sm:mb-4"
             >
               {Object.entries(electronicItems).map(
                 ([key, { icon: Icon, name }]) => (
@@ -521,14 +510,12 @@ const Hero = () => {
                 <ProductCardModal
                   product={selectedProduct}
                   onClose={handleCloseModal}
-                  triggerLoginModal={() => setShowLoginModal(true)}
                 />
               </>
             )}
           </div>
         </div>
         {showComplaintModal && <ComplaintModal onClose={closeComplaintModal} />}
-        {showLoginModal && <LoginModal onClose={closeLoginModal} />}
       </section>
     </main>
   );

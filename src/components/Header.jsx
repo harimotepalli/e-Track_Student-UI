@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { HashLink } from "react-router-hash-link";
 import { Menu, X, MonitorCheck, LogOut, User } from "lucide-react";
 import AuthContext from "./context/AuthContext";
-import LoginModal from "./LoginModal";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { isLoggedIn, logout } = useContext(AuthContext);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,11 +21,11 @@ const Header = () => {
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const openLoginModal = () => {
-    setIsLoginModalOpen(true);
-    if (isMenuOpen) toggleMenu();
+  
+  const handleLogout = () => {
+    logout();
+    window.location.href = 'http://localhost:5174/login';
   };
-  const closeLoginModal = () => setIsLoginModalOpen(false);
 
   return (
     <>
@@ -95,7 +94,7 @@ const Header = () => {
 
               {isLoggedIn ? (
                 <motion.button
-                  onClick={logout}
+                  onClick={handleLogout}
                   className="flex items-center px-4 py-2 rounded-full bg-cool-blue/20 border border-cool-blue/50 text-white transition duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -105,7 +104,7 @@ const Header = () => {
                 </motion.button>
               ) : (
                 <motion.button
-                  onClick={openLoginModal}
+                  onClick={() => window.location.href = 'http://localhost:5174/login'}
                   className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 border border-neon-green/50 text-white transition duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -187,7 +186,7 @@ const Header = () => {
                 {isLoggedIn ? (
                   <motion.button
                     onClick={() => {
-                      logout();
+                      handleLogout();
                       toggleMenu();
                     }}
                     className="flex items-center py-2 text-white transition duration-300"
@@ -199,7 +198,10 @@ const Header = () => {
                   </motion.button>
                 ) : (
                   <motion.button
-                    onClick={openLoginModal}
+                    onClick={() => {
+                      window.location.href = 'http://localhost:5174/login';
+                      toggleMenu();
+                    }}
                     className="flex items-center py-2 text-white transition duration-300"
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -213,13 +215,6 @@ const Header = () => {
           </motion.div>
         )}
       </motion.header>
-
-      <AnimatePresence>
-        {isLoginModalOpen && (
-          <LoginModal isOpen={isLoginModalOpen} onClose={closeLoginModal} />
-        )
-        }
-      </AnimatePresence>
     </>
   );
 };
