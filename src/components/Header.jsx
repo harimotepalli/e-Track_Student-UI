@@ -24,7 +24,7 @@ const Header = () => {
   
   const handleLogout = () => {
     logout();
-    window.location.href = 'http://localhost:5174/login';
+    window.location.href = 'https://e-track-project.vercel.app/login';
   };
 
   return (
