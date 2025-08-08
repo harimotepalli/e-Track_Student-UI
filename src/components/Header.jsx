@@ -24,7 +24,7 @@ const Header = () => {
   
   const handleLogout = () => {
     logout();
-    window.location.href = 'https://e-track-project.vercel.app/login';
+    window.location.href = 'https://e-track-project.vercel.app';
   };
 
   return (
@@ -104,7 +104,7 @@ const Header = () => {
                 </motion.button>
               ) : (
                 <motion.button
-                  onClick={() => window.location.href = 'http://localhost:5174/login'}
+                  onClick={() => window.location.href = 'https://e-track-project.vercel.app'}
                   className="flex items-center px-4 py-2 rounded-full bg-neon-green/20 border border-neon-green/50 text-white transition duration-300"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
